@@ -33,7 +33,21 @@ def singleton1(cls):
 
     return wapper
 
-@singleton
+class Singleton:
+    def __init__(self,cls):
+        self.cls = cls
+        self.instances = {}
+        self.lock = Lock()
+
+    def __call__(self,*args, **kwargs):
+        if self.cls not in self.instances:
+            with self.lock:
+                if self.cls not in self.instances:
+                    self.instances[self.cls] = self.cls(*args, **kwargs)
+        return self.instances[self.cls]
+
+
+@Singleton
 class Test:
     def __init__(self):
         print("init")
